@@ -30,7 +30,7 @@ class ASTRID:
         self.state = "Initialized"
         self.remap_names=remap_names
                 
-    def write_matrix(self, fname=None, nanplaceholder='-99.0', taxon_cutoff = 0):
+    def write_matrix(self, fname=None, nanplaceholder='-99.0', taxon_cutoff = 0, mapping=None, bygene=False):
         if getattr( sys, 'frozen', False ) :
             path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
         else:
@@ -43,8 +43,15 @@ class ASTRID:
             tmpfd, fname = tempfile.mkstemp()
             tmp = os.fdopen(tmpfd, 'w')
         tmp = open(fname, 'w')    
-        
-        args = [path + '/makemat', '--matrix', fname, '--taxlist', fname + '_taxlist', '--taxcutoff', str(taxon_cutoff), '--nanplaceholder', str(nanplaceholder), '--n_missing', fname + '_nmissing']
+
+        argmapping=[""]
+        argbygene=[""]
+        if mapping != None:
+            argmapping = ["--inputmap", mapping]
+        if bygene == True:
+            argbygene=["--bygene"]
+
+        args = [path + '/makemat', '--matrix', fname, '--taxlist', fname + '_taxlist', '--taxcutoff', str(taxon_cutoff), '--nanplaceholder', str(nanplaceholder), '--n_missing', fname + '_nmissing'] + argmapping + argbygene
 
         subprocess.Popen(args, stdin = subprocess.PIPE).communicate(self.genetrees)
         
@@ -77,10 +84,10 @@ class ASTRID:
 
     def tree_str(self):
         return self.tree.as_string('newick', suppress_edge_lengths=True, suppress_internal_node_labels=True, unquoted_underscores=True, preserve_spaces=True, suppress_rooting=True)
-    def run(self, method, fname=None, taxon_cutoff = 0):
+    def run(self, method, fname=None, taxon_cutoff = 0, mapping='',bygene=False):
         print "generating matrix"
         t = time.time()
-        self.write_matrix(fname, taxon_cutoff=taxon_cutoff)
+        self.write_matrix(fname, taxon_cutoff=taxon_cutoff, mapping=mapping,bygene=bygene)
         print time.time() - t, "seconds"
         print "inferring tree"
         t = time.time()

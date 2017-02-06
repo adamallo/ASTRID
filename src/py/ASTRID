@@ -11,7 +11,7 @@ from ASTRID import ASTRID
 
     
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description= "ASTRID: Accurate Species TRees from Internode Distances.")
+    parser = argparse.ArgumentParser(description= "ASTRID: Accurate Species TRees from Internode Distances.",usage='%(prog)s [options]\n\n Attention: Newick input gene trees must have a basal trifurcation in order to calculate distances properly\n')
 
     parser.add_argument('-i', '--input', required=True, dest='input',
                         help="File containing gene trees as newick strings")
@@ -29,7 +29,11 @@ if __name__ == '__main__':
                         help="Save distance matrix in PHYLIP format, or use cached matrix if it exists (useful for trying multiple distance-based methods)")
     parser.add_argument('--taxon-cutoff', dest='taxon_cutoff', default=0, type=int,
                         help="Only take trees with at least this many taxa")
-    
+    parser.add_argument('--map', default='', dest='mapfile',
+                        help="Taxon/species mapping file for multiple individuals per species")
+    parser.add_argument('--bygene', action='store_true',
+                        help="Calculate the AGIDS per gene tree instead of the global mean. This is discouraged for datasets with full species missing")
+
     args = parser.parse_args()
 
 
@@ -42,8 +46,16 @@ if __name__ == '__main__':
     elif vars(args)['bsfile']:
         bslist = [i.strip() for i in open(args.bsfile).readlines()]
 
+    mapfile=args.mapfile
+    if args.mapfile != "":
+        if not os.path.isfile(args.mapfile):
+            raise Exception('Incorrect mapping file')
+        else:
+            print "Using the file %s as gene copy/species mapping for multiindividual run" % args.mapfile
+            mapfile=os.path.abspath(args.mapfile)
+
     a = ASTRID(open(args.input).read())
-    a.run(method, fname, args.taxon_cutoff)
+    a.run(method, fname, args.taxon_cutoff, mapfile, args.bygene)
 
     print "ASTRID tree:"
     print a.tree_str()
