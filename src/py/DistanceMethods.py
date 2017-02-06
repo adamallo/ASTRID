@@ -57,7 +57,7 @@ def fastme(fname):
 
 def fastme2(fname, method='bal', nni=True, spr=False):
 
-    args = [fastme2_exec, '-i', fname, '-o', fname + '_fastme2.t']
+    args = [fastme2_exec,"-T","1", '-i', fname, '-o', fname + '_fastme2.t']
     if nni:
         args.append('-n')
     if spr:
