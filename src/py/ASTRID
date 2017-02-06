@@ -53,6 +53,8 @@ if __name__ == '__main__':
         else:
             print "Using the file %s as gene copy/species mapping for multiindividual run" % args.mapfile
             mapfile=os.path.abspath(args.mapfile)
+        if args.bygene == True:
+            print "Using the calculation by gene"
 
     a = ASTRID(open(args.input).read())
     a.run(method, fname, args.taxon_cutoff, mapfile, args.bygene)
