@@ -1,8 +1,10 @@
-# ASTRID 1.4
+# ASTRIDM 0.9
 
 # Download [HERE](https://github.com/pranjalv123/ASTRID/releases)
 
-Accurate Species TRee Reconstruction with Internode Distances
+Accurate Species TRee Reconstruction with Internode Distances for Multiple individuals per species
+
+This is a fork of the original work by Pranjal Vachaspati et al. adapted for running data sets with multiple individuals per species and missing data.
 
 For more information, see http://pranjalv123.github.io/ASTRID/
 
@@ -86,6 +88,10 @@ folder and an `ASTRID` executable in it.
 			      distance-based methods)
 	--taxon-cutoff TAXON_CUTOFF
 			      Only take trees with at least this many taxa
+        --map MAPFILE         Taxon/species mapping file for multiple individuals
+                              per species
+        --bygene              Calculate the AGIDS per gene tree instead of the
+                              global mean.
 
 ASTRID is also easy to use from within Python:
 

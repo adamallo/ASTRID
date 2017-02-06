@@ -32,7 +32,7 @@ if __name__ == '__main__':
     parser.add_argument('--map', default='', dest='mapfile',
                         help="Taxon/species mapping file for multiple individuals per species")
     parser.add_argument('--bygene', action='store_true',
-                        help="Calculate the AGIDS per gene tree instead of the global mean. This is discouraged for datasets with full species missing")
+                        help="Calculate the AGIDS per gene tree instead of the global mean. This may be a better alternative for datasets with missing data.")
 
     args = parser.parse_args()
 
